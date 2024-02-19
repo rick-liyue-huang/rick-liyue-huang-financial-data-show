@@ -1,12 +1,14 @@
 import React from 'react';
+import { CompanySearch } from '../company';
+import { AddPortfolio } from './Portfolio/AddPortfolio';
 
 interface Props {
-  companyName: string;
-  price: number;
-  ticker: string;
+  id: string;
+  searchResult: CompanySearch;
+  handleCreatePortfolio: (e: React.SyntheticEvent) => void;
 }
 
-export const Card = (props: Props) => {
+export const Card = ({ id, searchResult, handleCreatePortfolio }: Props) => {
   return (
     <div className='card'>
       <img
@@ -15,11 +17,17 @@ export const Card = (props: Props) => {
       />
       <div className='details'>
         <h2>
-          {props.companyName}({props.ticker})
+          {searchResult.name}({searchResult.symbol})
         </h2>
-        <p>${props.price}</p>
+        <p>{searchResult.currency}</p>
       </div>
-      <p className='info'>this is the content of the card</p>
+      <p className='info'>
+        {searchResult.exchangeShortName} - {searchResult.stockExchange}
+      </p>
+      <AddPortfolio
+        symbol={searchResult.symbol}
+        handleCreatePortfolio={handleCreatePortfolio}
+      />
     </div>
   );
 };

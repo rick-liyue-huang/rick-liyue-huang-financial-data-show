@@ -1,14 +1,24 @@
 import React from 'react';
 import { Card } from './Card';
+import { CompanySearch } from '../company';
+import { v4 as uuidv4 } from 'uuid';
 
-interface Props {}
+interface Props {
+  searchResults: CompanySearch[];
+  handleCreatePortfolio: (e: React.SyntheticEvent) => void;
+}
 
 export const CardList = (props: Props) => {
   return (
     <div>
-      <Card companyName='Apple' ticker='AAPL' price={100} />
-      <Card companyName='Tesla' ticker='TSLA' price={200} />
-      <Card companyName='Microsoft' ticker='MSFT' price={250} />
+      {props.searchResults.map((company: CompanySearch) => (
+        <Card
+          id={company.symbol}
+          key={uuidv4()}
+          searchResult={company}
+          handleCreatePortfolio={props.handleCreatePortfolio}
+        />
+      ))}
     </div>
   );
 };
