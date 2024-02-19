@@ -1,6 +1,7 @@
 import React from 'react';
 import { CompanySearch } from '../company';
 import { AddPortfolio } from './Portfolio/AddPortfolio';
+import { Link } from 'react-router-dom';
 
 interface Props {
   id: string;
@@ -16,9 +17,12 @@ export const Card = ({ id, searchResult, handleCreatePortfolio }: Props) => {
         alt='card-img'
       />
       <div className='details'>
-        <h2>
+        <Link
+          to={`/company/${searchResult.symbol}`}
+          className='font-bold text-center md:text-ellipsis'
+        >
           {searchResult.name}({searchResult.symbol})
-        </h2>
+        </Link>
         <p>{searchResult.currency}</p>
       </div>
       <p className='info'>
