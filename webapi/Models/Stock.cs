@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace webapi.Models
 {
+    [Table("Stocks")]
     public class Stock
     {
         public int Id { get; set; }
@@ -16,7 +17,7 @@ namespace webapi.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Purchase { get; set; }
         public decimal LastDiv { get; set; }
-        public string Industry { get; set; }
+        public string Industry { get; set; } = string.Empty;
 
         public long MarketCap { get; set; }
 
