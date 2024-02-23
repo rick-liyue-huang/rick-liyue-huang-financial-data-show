@@ -38,18 +38,41 @@ namespace webapi.Controllers
     [HttpPost]
     public IActionResult Create([FromBody] CreateStockRequest stockDto) // stockDto is the input from the user, and get the map to the Stock model
     {
-      var stock = new Stock
-      {
-        Symbol = stockDto.Symbol,
-        CompanyName = stockDto.CompanyName,
-        Purchase = stockDto.Purchase,
-        LastDiv = stockDto.LastDiv,
-        Industry = stockDto.Industry,
-        MarketCap = stockDto.MarketCap,
-      };
+      var stock = stockDto.MapToModel();
       _context.Stocks.Add(stock);
       _context.SaveChanges();
       return CreatedAtAction(nameof(GetById), new { id = stock.Id }, stock.MapToDto());
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult Update([FromRoute] int id, [FromBody] UpdateStockRequest stockDto)
+    {
+      var stock = _context.Stocks.FirstOrDefault(x => x.Id == id);
+      if (stock == null)
+      {
+        return NotFound();
+      }
+      stock.Symbol = stockDto.Symbol;
+      stock.CompanyName = stockDto.CompanyName;
+      stock.Purchase = stockDto.Purchase;
+      stock.LastDiv = stockDto.LastDiv;
+      stock.Industry = stockDto.Industry;
+      stock.MarketCap = stockDto.MarketCap;
+      _context.SaveChanges();
+      return Ok(stock.MapToDto());
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete([FromRoute] int id)
+    {
+      var stock = _context.Stocks.FirstOrDefault(x => x.Id == id);
+      if (stock == null)
+      {
+        return NotFound();
+      }
+      _context.Stocks.Remove(stock);
+      _context.SaveChanges();
+      return NoContent();
     }
   }
 }
