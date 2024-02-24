@@ -1,3 +1,5 @@
+using webapi.Dtos.Comment;
+
 namespace webapi.Dto.Stock
 {
   public class StockDto
@@ -9,5 +11,8 @@ namespace webapi.Dto.Stock
     public decimal LastDiv { get; set; }
     public string Industry { get; set; } = string.Empty;
     public long MarketCap { get; set; }
+
+    // include the comments
+    public List<CommentDto> Comments { get; set; }
   }
 }

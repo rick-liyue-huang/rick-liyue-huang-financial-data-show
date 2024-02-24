@@ -17,6 +17,7 @@ namespace webapi.Mappers
         LastDiv = stock.LastDiv,
         Industry = stock.Industry,
         MarketCap = stock.MarketCap,
+        Comments = stock.Comments.Select(c => c.MapToDto()).ToList(),
       };
     }
 
@@ -31,6 +32,7 @@ namespace webapi.Mappers
         LastDiv = stockDto.LastDiv,
         Industry = stockDto.Industry,
         MarketCap = stockDto.MarketCap,
+
       };
     }
   }
