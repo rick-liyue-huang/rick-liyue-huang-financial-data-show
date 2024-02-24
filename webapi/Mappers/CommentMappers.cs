@@ -16,5 +16,16 @@ namespace webapi.Mappers
         StockId = comment.StockId,
       };
     }
+
+    public static Comment MapToModel(this CreateCommentRequest comment, int stockId)
+    {
+      return new Comment
+      {
+        Title = comment.Title,
+        Content = comment.Content,
+        StockId = stockId,
+      };
+    }
+
   }
 }

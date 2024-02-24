@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using webapi.Data;
+using webapi.Dtos.Comment;
+using webapi.Interface;
 using webapi.Interfaces;
 using webapi.Mappers;
 
@@ -12,10 +14,12 @@ namespace webapi.Controllers
   {
     private readonly ApplicationDbContext _context;
     private readonly ICommentRepository _commentRepository;
-    public CommentController(ApplicationDbContext context, ICommentRepository commentRepository)
+    private readonly IStockRepository _stockRepository;
+    public CommentController(ApplicationDbContext context, ICommentRepository commentRepository, IStockRepository stockRepository)
     {
       _context = context;
       _commentRepository = commentRepository;
+      _stockRepository = stockRepository;
     }
 
     [HttpGet]
@@ -40,15 +44,19 @@ namespace webapi.Controllers
       return Ok(comment.MapToDto());
     }
 
-    // [HttpPost]
-    // public async Task<IActionResult> Create([FromBody] CreateCommentRequest commentDto) // commentDto is the input from the user, and get the map to the Comment model
-    // {
-    //   var comment = commentDto.MapToModel();
-    //   // await _context.Comments.AddAsync(comment);
-    //   // await _context.SaveChangesAsync();
-    //   await _commentRepository.CreateCommentAsync(comment);
-    //   return CreatedAtAction(nameof(GetById), new { id = comment.Id }, comment.MapToDto());
-    // }
+    [HttpPost("{stockId}")]
+    public async Task<IActionResult> Create([FromRoute] int stockId, [FromBody] CreateCommentRequest commentDto) // commentDto is the input from the user, and get the map to the Comment model
+    {
+      if (!await _stockRepository.StockExists(stockId))
+      {
+        return BadRequest("Stock does not exist");
+      }
+
+      var comment = commentDto.MapToModel(stockId);
+      await _commentRepository.CreateCommentAsync(comment);
+      return CreatedAtAction(nameof(GetById), new { id = comment.Id }, comment.MapToDto());
+
+    }
 
     // [HttpPut("{id}")]
     // public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommentRequest commentDto)
@@ -65,7 +73,18 @@ namespace webapi.Controllers
     //   return Ok(comment.MapToDto());
     // }
 
-    // [HttpDelete("{id}")]
-    // public async Task<IActionResult>
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+      // var comment = await _context.Comments.FirstOrDefaultAsync(x => x.Id == id);
+      var comment = await _commentRepository.DeleteCommentAsync(id);
+      if (comment == null)
+      {
+        return NotFound();
+      }
+      // _context.Comments.Remove(comment);
+      // await _context.SaveChangesAsync();
+      return Ok(comment.MapToDto());
+    }
   }
 }

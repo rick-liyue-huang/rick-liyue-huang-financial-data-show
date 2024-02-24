@@ -8,10 +8,10 @@ namespace webapi.Interfaces
 
     Task<Comment?> GetCommentByIdAsync(int id);
 
-    // Task<Comment> CreateCommentAsync(Comment commentDto);
+    Task<Comment> CreateCommentAsync(Comment commentDto);
 
-    // Task<Comment?> UpdateCommentAsync(int Id, UpdateCommentRequest comment);
+    Task<Comment?> UpdateCommentAsync(int Id, Comment comment);
 
-    // Task<Comment?> DeleteCommentAsync(int Id);
+    Task<Comment?> DeleteCommentAsync(int Id);
   }
 }
