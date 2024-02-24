@@ -25,6 +25,12 @@ namespace webapi.Controllers
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
+
+      //  from the control base class
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState);
+      }
       // var comments = await _context.Comments.ToListAsync();
       var comments = await _commentRepository.GetAllCommentsAsync();
 
@@ -32,9 +38,13 @@ namespace webapi.Controllers
       return Ok(commentDto);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState);
+      }
       // var comment = await _context.Comments.FindAsync(id);
       var comment = await _commentRepository.GetCommentByIdAsync(id);
       if (comment == null)
@@ -44,9 +54,14 @@ namespace webapi.Controllers
       return Ok(comment.MapToDto());
     }
 
-    [HttpPost("{stockId}")]
+    [HttpPost("{stockId:int}")]
     public async Task<IActionResult> Create([FromRoute] int stockId, [FromBody] CreateCommentRequest commentDto) // commentDto is the input from the user, and get the map to the Comment model
     {
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState);
+      }
+
       if (!await _stockRepository.StockExists(stockId))
       {
         return BadRequest("Stock does not exist");
@@ -58,29 +73,40 @@ namespace webapi.Controllers
 
     }
 
-    // [HttpPut("{id}")]
-    // public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommentRequest commentDto)
-    // {
-    //   // var comment = await _context.Comments.FirstOrDefaultAsync(x => x.Id == id);
-    //   var comment = await _commentRepository.UpdateCommentAsync(id, commentDto);
-    //   if (comment == null)
-    //   {
-    //     return NotFound();
-    //   }
-    //   // comment.Content = commentDto.Content;
-    //   // comment.StockId = commentDto.StockId;
-    //   // await _context.SaveChangesAsync();
-    //   return Ok(comment.MapToDto());
-    // }
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommentRequest commentDto)
+    {
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState);
+      }
 
-    [HttpDelete("{id}")]
+      // var comment = await _context.Comments.FirstOrDefaultAsync(x => x.Id == id);
+      var comment = await _commentRepository.UpdateCommentAsync(id, commentDto.MapToModel());
+      if (comment == null)
+      {
+        return NotFound("Comment not found");
+      }
+      // comment.Content = commentDto.Content;
+      // comment.StockId = commentDto.StockId;
+      // await _context.SaveChangesAsync();
+      return Ok(comment.MapToDto());
+    }
+
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
+
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState);
+      }
+
       // var comment = await _context.Comments.FirstOrDefaultAsync(x => x.Id == id);
       var comment = await _commentRepository.DeleteCommentAsync(id);
       if (comment == null)
       {
-        return NotFound();
+        return NotFound("Comment not found");
       }
       // _context.Comments.Remove(comment);
       // await _context.SaveChangesAsync();

@@ -27,5 +27,14 @@ namespace webapi.Mappers
       };
     }
 
+    public static Comment MapToModel(this UpdateCommentRequest comment)
+    {
+      return new Comment
+      {
+        Title = comment.Title,
+        Content = comment.Content,
+      };
+    }
+
   }
 }

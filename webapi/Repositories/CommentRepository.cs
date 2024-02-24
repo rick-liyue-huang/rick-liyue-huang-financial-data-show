@@ -46,7 +46,16 @@ namespace webapi.Repository
 
     public async Task<Comment?> UpdateCommentAsync(int Id, Comment comment)
     {
-      throw new NotImplementedException();
+      var commentToUpdate = await _context.Comments.FindAsync(Id);
+
+      if (commentToUpdate == null)
+      {
+        return null;
+      }
+      commentToUpdate.Title = comment.Title;
+      commentToUpdate.Content = comment.Content;
+      await _context.SaveChangesAsync();
+      return commentToUpdate;
     }
   }
 }

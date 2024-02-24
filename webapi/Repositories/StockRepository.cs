@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using webapi.Data;
 using webapi.Dto.Stock;
+using webapi.Helpers;
 using webapi.Interface;
 using webapi.Models;
 
@@ -13,9 +14,39 @@ namespace webapi.Repository
     {
       _context = context;
     }
-    public async Task<List<Stock>> GetAllStocksAsync()
+    public async Task<List<Stock>> GetAllStocksAsync(QueryObject queryObject)
     {
-      return await _context.Stocks.Include(c => c.Comments).ToListAsync();
+      // return await _context.Stocks.Include(c => c.Comments).ToListAsync();
+      var stocks = _context.Stocks.Include(s => s.Comments).AsQueryable();
+
+      // Filtering
+      if (!string.IsNullOrWhiteSpace(queryObject.CompanyName))
+      {
+        stocks = stocks.Where(s => s.CompanyName.Contains(queryObject.CompanyName));
+      }
+      if (!string.IsNullOrWhiteSpace(queryObject.Symbol))
+      {
+        stocks = stocks.Where(s => s.Symbol.Contains(queryObject.Symbol));
+      }
+
+
+      // Sorting
+      if (!string.IsNullOrWhiteSpace(queryObject.SortBy))
+      {
+        if (queryObject.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
+        {
+          stocks = queryObject.IsSortDescending ? stocks.OrderByDescending(s => s.Symbol) : stocks.OrderBy(s => s.Symbol);
+        }
+        else if (queryObject.SortBy.Equals("CompanyName", StringComparison.OrdinalIgnoreCase))
+        {
+          stocks = queryObject.IsSortDescending ? stocks.OrderByDescending(s => s.CompanyName) : stocks.OrderBy(s => s.CompanyName);
+        }
+      }
+
+      // Pagination
+      var skipNumber = (queryObject.PageNumber - 1) * queryObject.PageSize;
+
+      return await stocks.Skip(skipNumber).Take(queryObject.PageSize).ToListAsync();
     }
 
     public async Task<Stock?> GetStockByIdAsync(int id)
@@ -63,5 +94,6 @@ namespace webapi.Repository
     {
       return _context.Stocks.AnyAsync(e => e.Id == id);
     }
+
   }
 }
