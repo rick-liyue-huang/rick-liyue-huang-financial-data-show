@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/rickhuang668/Documents/new-start/financial-data-show/webapi/webapi.csproj": {}
+    "/Users/rickhuang668/Documents/new-start/financial-data-show/webApi/webApi.csproj": {}
   },
   "projects": {
-    "/Users/rickhuang668/Documents/new-start/financial-data-show/webapi/webapi.csproj": {
+    "/Users/rickhuang668/Documents/new-start/financial-data-show/webApi/webApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/rickhuang668/Documents/new-start/financial-data-show/webapi/webapi.csproj",
-        "projectName": "webapi",
-        "projectPath": "/Users/rickhuang668/Documents/new-start/financial-data-show/webapi/webapi.csproj",
+        "projectUniqueName": "/Users/rickhuang668/Documents/new-start/financial-data-show/webApi/webApi.csproj",
+        "projectName": "webApi",
+        "projectPath": "/Users/rickhuang668/Documents/new-start/financial-data-show/webApi/webApi.csproj",
         "packagesPath": "/Users/rickhuang668/.nuget/packages/",
-        "outputPath": "/Users/rickhuang668/Documents/new-start/financial-data-show/webapi/obj/",
+        "outputPath": "/Users/rickhuang668/Documents/new-start/financial-data-show/webApi/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/rickhuang668/.nuget/NuGet/NuGet.Config"
@@ -38,41 +38,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "Microsoft.AspNetCore.Authentication.JwtBearer": {
-              "target": "Package",
-              "version": "[8.0.2, )"
-            },
-            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[8.0.2, )"
-            },
-            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
-              "target": "Package",
-              "version": "[8.0.2, )"
-            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.1, )"
-            },
-            "Microsoft.EntityFrameworkCore.Design": {
-              "target": "Package",
-              "version": "[8.0.2, )"
-            },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
-              "target": "Package",
-              "version": "[8.0.2, )"
-            },
-            "Microsoft.EntityFrameworkCore.Tools": {
-              "target": "Package",
-              "version": "[8.0.2, )"
-            },
-            "Microsoft.Extensions.Identity.Core": {
-              "target": "Package",
-              "version": "[8.0.2, )"
-            },
-            "Newtonsoft.Json": {
-              "target": "Package",
-              "version": "[13.0.3, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
