@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using webAPI.DataConnectionContext;
 using webAPI.Interfaces;
 using webAPI.Repositories;
@@ -17,11 +18,14 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-// Add the controllers to the container
-builder.Services.AddControllers();
+// Add the controllers to the container, and configure the JSON serializer to ignore reference loops, which can cause the serializer to crash for the one-to-many relationship between stocks and comments
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+);
 
 // Add the repository to the container
 builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 var app = builder.Build();
 

@@ -35,13 +35,13 @@ namespace webAPI.Repositories
 
     public async Task<Stock?> GetStockByIdAsync(int id)
     {
-      return await _context.Stocks.FindAsync(id);
+      return await _context.Stocks.Include(s => s.Comments).FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task<List<Stock>> GetStocksAsync()
     {
       // get all the stocks from the database by using 'EntityFrameworkCore' and 'ToListAsync' method.
-      return await _context.Stocks.ToListAsync();
+      return await _context.Stocks.Include(s => s.Comments).ToListAsync();
     }
 
     public async Task<Stock?> UpdateStockAsync(int id, UpdateStockRequestDto stockDto)

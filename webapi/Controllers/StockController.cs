@@ -12,11 +12,11 @@ namespace webAPI.Controllers
   [ApiController]
   public class StockController : ControllerBase
   {
-    private readonly ApplicationDBContext _context;
+    // private readonly ApplicationDBContext _context;
     private readonly IStockRepository _stockRepository;
-    public StockController(ApplicationDBContext context, IStockRepository stockRepository)
+    public StockController(/*ApplicationDBContext context, */IStockRepository stockRepository)
     {
-      _context = context;
+      // _context = context;
       _stockRepository = stockRepository;
     }
 

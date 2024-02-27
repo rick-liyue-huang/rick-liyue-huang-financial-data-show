@@ -1,3 +1,5 @@
+using webAPI.Dtos.Comment;
+
 namespace webAPI.Dtos.Stock
 {
   // The StockDto class is used to transfer data between the webAPI and the client
@@ -15,5 +17,7 @@ namespace webAPI.Dtos.Stock
     public string Industry { get; set; } = string.Empty;
 
     public long MarketCap { get; set; }
+
+    public List<CommentDto> Comments { get; set; }
   }
 }
