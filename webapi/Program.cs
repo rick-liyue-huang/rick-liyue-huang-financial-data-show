@@ -11,9 +11,12 @@ builder.Services.AddSwaggerGen();
 // Add the database context to the container
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
-    // confirmed from appsettings.json that the connection string is named "DefaultConnection"
+    // confirmed from appsettings.json that the connection string is named "DefaultConnection", and then create the tables in the database from the models
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+// Add the controllers to the container
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -25,6 +28,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Add the routing to the request pipeline
+app.MapControllers();
 
 app.Run();
 

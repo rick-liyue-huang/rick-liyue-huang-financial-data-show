@@ -4,6 +4,8 @@ using webAPI.Models;
 
 namespace webAPI.DataConnectionContext
 {
+
+  // The ApplicationDBContext class represents a session with the database and can be used to query and save instances of Stock and Comment.
   public class ApplicationDBContext : DbContext
   {
     public ApplicationDBContext(DbContextOptions options) : base(options)
