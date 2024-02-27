@@ -18,13 +18,13 @@ namespace webAPI.Mappers
       };
     }
 
-    public static Comment FromCreateRequestToComment(this CreateCommentRequestDto commentDto)
+    public static Comment FromCreateRequestToComment(this CreateCommentRequestDto commentDto, int stockId)
     {
       return new Comment
       {
         Title = commentDto.Title,
         Content = commentDto.Content,
-        StockId = commentDto.StockId
+        StockId = stockId
       };
     }
 
@@ -32,7 +32,6 @@ namespace webAPI.Mappers
     {
       comment.Title = commentDto.Title;
       comment.Content = commentDto.Content;
-      comment.StockId = commentDto.StockId;
       return comment;
     }
   }
