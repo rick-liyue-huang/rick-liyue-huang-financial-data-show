@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using webAPI.DataConnectionContext;
+using webAPI.Interfaces;
+using webAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,9 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 
 // Add the controllers to the container
 builder.Services.AddControllers();
+
+// Add the repository to the container
+builder.Services.AddScoped<IStockRepository, StockRepository>();
 
 var app = builder.Build();
 
