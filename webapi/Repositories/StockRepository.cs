@@ -4,6 +4,7 @@ using webAPI.Dtos.Stock;
 using webAPI.Interfaces;
 using webAPI.Models;
 using webAPI.Mappers;
+using webAPI.Helpers;
 
 namespace webAPI.Repositories
 {
@@ -38,10 +39,24 @@ namespace webAPI.Repositories
       return await _context.Stocks.Include(s => s.Comments).FirstOrDefaultAsync(i => i.Id == id);
     }
 
-    public async Task<List<Stock>> GetStocksAsync()
+    public async Task<List<Stock>> GetStocksAsync(QueryObject query)
     {
       // get all the stocks from the database by using 'EntityFrameworkCore' and 'ToListAsync' method.
-      return await _context.Stocks.Include(s => s.Comments).ToListAsync();
+      // return await _context.Stocks.Include(s => s.Comments).ToListAsync();
+
+      var stocks = _context.Stocks.Include(s => s.Comments).AsQueryable();
+      if (!string.IsNullOrWhiteSpace(query.CompanyName))
+      {
+        stocks = stocks.Where(s => s.CompanyName.Contains(query.CompanyName));
+      }
+
+      if (!string.IsNullOrWhiteSpace(query.Symbol))
+      {
+        stocks = stocks.Where(s => s.Symbol.Contains(query.Symbol));
+      }
+
+      return await stocks.ToListAsync();
+
     }
 
     public Task<bool> StockExists(int id)

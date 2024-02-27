@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webAPI.DataConnectionContext;
 using webAPI.Dtos.Stock;
+using webAPI.Helpers;
 using webAPI.Interfaces;
 using webAPI.Mappers;
 using webAPI.Models;
@@ -21,17 +22,24 @@ namespace webAPI.Controllers
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetStocks()
+    public async Task<IActionResult> GetStocks([FromQuery] QueryObject query)
     {
       // get all the stocks from the database and convert them to StockDto, here Stocks is 'DbSet<Stock>', so we can use Mapper to convert it to 'StockDto'.
       // var stocks = await _context.Stocks.ToListAsync();
 
-      var stocks = await _stockRepository.GetStocksAsync();
+      // match with the data validation in Dto
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState);
+      }
+
+      var stocks = await _stockRepository.GetStocksAsync(query);
       var stocksDto = stocks.Select(s => s.ToStockDto());
       return Ok(stocksDto);
     }
 
-    [HttpGet("{id}")]
+    // data validation
+    [HttpGet("{id:int}")]
     public async Task<IActionResult> GetSingleStockById([FromRoute] int id)
     {
 
@@ -42,6 +50,12 @@ namespace webAPI.Controllers
         return NotFound("Stock not found");
       }
       */
+
+      // match with the data validation in Dto
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState);
+      }
       var stock = await _stockRepository.GetStockByIdAsync(id);
       if (stock == null)
       {
@@ -53,6 +67,13 @@ namespace webAPI.Controllers
     [HttpPost]
     public async Task<IActionResult> CreatePost([FromBody] CreateStockRequestDto stockDto)
     {
+
+      // match with the data validation in Dto
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState);
+      }
+
       var stock = stockDto.FromCreateRequestToStock();
       // await _context.Stocks.AddAsync(stock);
       // await _context.SaveChangesAsync();
@@ -62,10 +83,17 @@ namespace webAPI.Controllers
     }
 
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateStock([FromRoute] int id, [FromBody] UpdateStockRequestDto stockDto)
     {
       // var stock = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
+
+      // match with the data validation in Dto
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState);
+      }
+
       var stock = await _stockRepository.UpdateStockAsync(id, stockDto);
       if (stock == null)
       {
@@ -77,10 +105,17 @@ namespace webAPI.Controllers
       return Ok(stock.ToStockDto());
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteStock([FromRoute] int id)
     {
       // var stock = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
+
+      // match with the data validation in Dto
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState);
+      }
+
       var stock = await _stockRepository.DeleteStockAsync(id);
       if (stock == null)
       {
