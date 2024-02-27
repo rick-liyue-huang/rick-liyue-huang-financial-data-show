@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using webAPI.DataConnectionContext;
+using webAPI.Mappers;
 
 namespace webAPI.Controllers
 {
@@ -16,7 +17,8 @@ namespace webAPI.Controllers
     [HttpGet]
     public IActionResult GetStocks()
     {
-      var stocks = _context.Stocks.ToList();
+      // get all the stocks from the database and convert them to StockDto, here Stocks is 'DbSet<Stock>', so we can use Mapper to convert it to 'StockDto'.
+      var stocks = _context.Stocks.ToList().Select(s => s.ToStockDto());
       return Ok(stocks);
     }
 
@@ -28,7 +30,7 @@ namespace webAPI.Controllers
       {
         return NotFound("Stock not found");
       }
-      return Ok(stock);
+      return Ok(stock.ToStockDto());
     }
   }
 }
