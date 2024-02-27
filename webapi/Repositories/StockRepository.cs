@@ -45,6 +45,8 @@ namespace webAPI.Repositories
       // return await _context.Stocks.Include(s => s.Comments).ToListAsync();
 
       var stocks = _context.Stocks.Include(s => s.Comments).AsQueryable();
+
+      // for the query parameters, sorting and filtering and pagination.
       if (!string.IsNullOrWhiteSpace(query.CompanyName))
       {
         stocks = stocks.Where(s => s.CompanyName.Contains(query.CompanyName));
@@ -55,7 +57,21 @@ namespace webAPI.Repositories
         stocks = stocks.Where(s => s.Symbol.Contains(query.Symbol));
       }
 
-      return await stocks.ToListAsync();
+      if (!string.IsNullOrWhiteSpace(query.SortBy))
+      {
+        if (query.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
+        {
+          stocks = query.IsDescending ? stocks.OrderByDescending(s => s.Symbol) : stocks.OrderBy(s => s.Symbol);
+        }
+        if (query.SortBy.Equals("CompanyName", StringComparison.OrdinalIgnoreCase))
+        {
+          stocks = query.IsDescending ? stocks.OrderByDescending(s => s.CompanyName) : stocks.OrderBy(s => s.CompanyName);
+        }
+
+      }
+      var skipNumber = (query.PageNumber - 1) * query.PageSize;
+
+      return await stocks.Skip(skipNumber).Take(query.PageSize).ToListAsync();
 
     }
 
