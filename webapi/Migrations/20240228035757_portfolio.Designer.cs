@@ -12,8 +12,8 @@ using webAPI.DataConnectionContext;
 namespace webAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240228013305_identitymodify")]
-    partial class identitymodify
+    [Migration("20240228035757_portfolio")]
+    partial class portfolio
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,13 +54,13 @@ namespace webAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "dfaac2b7-8908-40e4-80f9-e177597b943d",
+                            Id = "081c9d3c-96ce-4ec0-8156-5505a3baa1fc",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "43b4d650-64e6-46d4-af0d-1ae41868492d",
+                            Id = "11628cdc-cc56-422d-b6a7-a1d92795638f",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -199,6 +199,24 @@ namespace webAPI.Migrations
                     b.HasIndex("StockId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("webAPI.Models.Portfolio", b =>
+                {
+                    b.Property<string>("WebAppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("StockId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("WebAppUserId", "StockId");
+
+                    b.HasIndex("StockId");
+
+                    b.ToTable("Portfolios");
                 });
 
             modelBuilder.Entity("webAPI.Models.Stock", b =>
@@ -360,9 +378,35 @@ namespace webAPI.Migrations
                     b.Navigation("Stock");
                 });
 
+            modelBuilder.Entity("webAPI.Models.Portfolio", b =>
+                {
+                    b.HasOne("webAPI.Models.Stock", "Stock")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("StockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("webAPI.Models.WebAppUser", "WebAppUser")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("WebAppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stock");
+
+                    b.Navigation("WebAppUser");
+                });
+
             modelBuilder.Entity("webAPI.Models.Stock", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Portfolios");
+                });
+
+            modelBuilder.Entity("webAPI.Models.WebAppUser", b =>
+                {
+                    b.Navigation("Portfolios");
                 });
 #pragma warning restore 612, 618
         }

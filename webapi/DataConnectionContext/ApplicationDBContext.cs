@@ -19,12 +19,27 @@ namespace webAPI.DataConnectionContext
     // A DbSet can be used to query and save instances of Comment. LINQ queries against a DbSet will be translated into queries against the database.
     public DbSet<Stock> Stocks { get; set; }
     public DbSet<Comment> Comments { get; set; }
+    public DbSet<Portfolio> Portfolios { get; set; }
 
 
     // tell identity we will use the role of WebAppUser, and the role of IdentityRole
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       base.OnModelCreating(modelBuilder);
+
+      // for the many to many relationship between Stock and WebAppUser
+      modelBuilder.Entity<Portfolio>(x => x.HasKey(p => new { p.WebAppUserId, p.StockId }));
+
+      modelBuilder.Entity<Portfolio>()
+        .HasOne(p => p.WebAppUser)
+        .WithMany(p => p.Portfolios)
+        .HasForeignKey(p => p.WebAppUserId);
+
+      modelBuilder.Entity<Portfolio>()
+        .HasOne(p => p.Stock)
+        .WithMany(p => p.Portfolios)
+        .HasForeignKey(p => p.StockId);
+
       List<IdentityRole> role = new List<IdentityRole>
       {
         new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" },

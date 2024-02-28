@@ -27,5 +27,8 @@ namespace webAPI.Models
 
     public List<Comment> Comments { get; set; } = new List<Comment>();
 
+    // Many to many relationship with WebAppUser
+    public List<Portfolio> Portfolios { get; set; } = new List<Portfolio>();
+
   }
 }
