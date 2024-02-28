@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using webAPI.Models;
 
@@ -6,7 +7,8 @@ namespace webAPI.DataConnectionContext
 {
 
   // The ApplicationDBContext class represents a session with the database and can be used to query and save instances of Stock and Comment.
-  public class ApplicationDBContext : DbContext
+  // before is DbContext, now is IdentityDbContext<WebAppUser>
+  public class ApplicationDBContext : IdentityDbContext<WebAppUser>
   {
     public ApplicationDBContext(DbContextOptions options) : base(options)
     {
