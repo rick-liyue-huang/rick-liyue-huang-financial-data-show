@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using webAPI.Models;
@@ -18,6 +19,19 @@ namespace webAPI.DataConnectionContext
     // A DbSet can be used to query and save instances of Comment. LINQ queries against a DbSet will be translated into queries against the database.
     public DbSet<Stock> Stocks { get; set; }
     public DbSet<Comment> Comments { get; set; }
+
+
+    // tell identity we will use the role of WebAppUser, and the role of IdentityRole
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+      base.OnModelCreating(modelBuilder);
+      List<IdentityRole> role = new List<IdentityRole>
+      {
+        new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" },
+        new IdentityRole { Name = "User", NormalizedName = "USER" }
+      };
+      modelBuilder.Entity<IdentityRole>().HasData(role);
+    }
   }
 }
 

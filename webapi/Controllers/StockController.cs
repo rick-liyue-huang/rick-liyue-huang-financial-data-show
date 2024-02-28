@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webAPI.DataConnectionContext;
@@ -22,6 +23,7 @@ namespace webAPI.Controllers
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetStocks([FromQuery] QueryObject query)
     {
       // get all the stocks from the database and convert them to StockDto, here Stocks is 'DbSet<Stock>', so we can use Mapper to convert it to 'StockDto'.
